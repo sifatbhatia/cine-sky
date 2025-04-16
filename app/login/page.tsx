@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { signIn, continueAsGuest } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +26,11 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGuestLogin = () => {
+    setLoading(true);
+    continueAsGuest();
   };
 
   return (
@@ -80,6 +85,25 @@ export default function LoginPage() {
           Don&apos;t have an account? <Link href="/register">Sign up</Link>
         </div>
       </form>
+
+      <div className="mt-6 w-full max-w-[400px]">
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/10"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-[#1d0811] text-white/60">or</span>
+          </div>
+        </div>
+        
+        <button
+          onClick={handleGuestLogin}
+          disabled={loading}
+          className="mt-6 w-full py-4 px-6 bg-white/10 hover:bg-white/20 text-white rounded-full font-medium transition-all"
+        >
+          Continue as Guest
+        </button>
+      </div>
     </div>
   );
 } 

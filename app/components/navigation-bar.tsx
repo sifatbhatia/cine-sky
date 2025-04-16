@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Navbar() {
-  const { logOut } = useAuth();
+  const { logOut, isGuest } = useAuth();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -58,13 +58,27 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Logout */}
-        <button
-          onClick={logOut}
-          className="ml-auto hidden md:inline-block bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2 rounded-full transition-all"
-        >
-          Log Out
-        </button>
+        {/* User Actions */}
+        <div className="ml-auto hidden md:flex items-center gap-3">
+          {isGuest ? (
+            <>
+              <span className="text-white/60 text-sm">Guest Mode</span>
+              <Link 
+                href="/login" 
+                className="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2 rounded-full transition-all"
+              >
+                Sign In
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={logOut}
+              className="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-5 py-2 rounded-full transition-all"
+            >
+              Log Out
+            </button>
+          )}
+        </div>
 
         {/* Mobile Menu Button */}
         <button className="md:hidden p-2 text-white" onClick={toggleMenu}>
@@ -130,15 +144,25 @@ export default function Navbar() {
             </Link>
           ))}
 
-          <button
-            onClick={() => {
-              logOut();
-              closeMenu();
-            }}
-            className="mt-auto bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full"
-          >
-            Log Out
-          </button>
+          {isGuest ? (
+            <Link
+              href="/login"
+              onClick={closeMenu}
+              className="mt-auto bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-center"
+            >
+              Sign In
+            </Link>
+          ) : (
+            <button
+              onClick={() => {
+                logOut();
+                closeMenu();
+              }}
+              className="mt-auto bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full"
+            >
+              Log Out
+            </button>
+          )}
         </div>
       </div>
     </>

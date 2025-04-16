@@ -10,7 +10,11 @@ import {
   FiDroplet,
   FiWind,
   FiInfo,
-  FiCompass
+  FiCompass,
+  FiSun,
+  FiCamera,
+  FiImage,
+  FiMap
 } from 'react-icons/fi';
 import { getWeatherIcon, getWindDirection } from '../lib/weather-utils';
 import ReactAnimatedWeather from 'react-animated-weather';
@@ -29,19 +33,73 @@ const popularCities = [
   'Toronto', 'Singapore', 'Berlin', 'Mumbai'
 ];
 
+// Add photography-specific data
+const getPhotographyConditions = (weather: WeatherData) => {
+  const conditions = [];
+  
+  // Check for good photography conditions
+  if (weather.main === 'Clear' || weather.main === 'Clouds') {
+    conditions.push('Good lighting conditions');
+  }
+  
+  if (weather.visibility > 8) {
+    conditions.push('Excellent visibility');
+  }
+  
+  if (weather.humidity < 70) {
+    conditions.push('Low humidity (good for equipment)');
+  }
+  
+  if (weather.wind.speed < 5) {
+    conditions.push('Low wind (good for stability)');
+  }
+  
+  return conditions.length > 0 ? conditions : ['Challenging conditions for photography'];
+};
+
+// Calculate golden hour times (simplified)
+const calculateGoldenHours = (lat: number, lon: number) => {
+  // This is a simplified calculation - in a real app, you'd use a proper astronomical library
+  const date = new Date();
+  const hour = date.getHours();
+  
+  // Approximate golden hours based on time of day
+  let sunrise = '6:00 AM';
+  let sunset = '8:00 PM';
+  
+  if (hour < 12) {
+    // Morning golden hour is 1 hour after sunrise
+    return {
+      sunrise: sunrise,
+      morningGolden: '7:00 AM',
+      sunset: sunset,
+      eveningGolden: '7:00 PM'
+    };
+  } else {
+    // Evening golden hour is 1 hour before sunset
+    return {
+      sunrise: sunrise,
+      morningGolden: '7:00 AM',
+      sunset: sunset,
+      eveningGolden: '7:00 PM'
+    };
+  }
+};
+
 export default function WeatherSearch() {
   const [query, setQuery] = useState('');
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
+    // Redirect if not authenticated and not in guest mode
+    if (!user && !isGuest && !loading) {
       router.push('/login');
     }
-  }, [user, router]);
+  }, [user, isGuest, loading, router]);
 
   const searchWeather = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,6 +289,94 @@ export default function WeatherSearch() {
                     <span className="text-base text-secondary">Wind Speed</span>
                   </div>
                   <p className="text-3xl font-semibold text-white">{weather.wind.speed} m/s</p>
+                </div>
+              </div>
+              
+              {/* Photography-specific information */}
+              <div className="p-6 border-t border-white/5">
+                <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                  <FiCamera className="text-[#e43c1c]" size={24} />
+                  Photography Conditions
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Golden Hours */}
+                  <div className="bg-[#1d0811]/80 rounded-2xl p-6 shadow-inner border border-white/5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <FiSun className="text-[#e43c1c]" size={20} />
+                      <span className="text-lg font-semibold text-white">Golden Hours</span>
+                    </div>
+                    
+                    {weather.lat && weather.lon ? (
+                      <div className="space-y-3">
+                        {(() => {
+                          const goldenHours = calculateGoldenHours(weather.lat, weather.lon);
+                          return (
+                            <>
+                              <div className="flex justify-between">
+                                <span className="text-secondary">Sunrise</span>
+                                <span className="text-white font-medium">{goldenHours.sunrise}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-secondary">Morning Golden Hour</span>
+                                <span className="text-white font-medium">{goldenHours.morningGolden}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-secondary">Evening Golden Hour</span>
+                                <span className="text-white font-medium">{goldenHours.eveningGolden}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-secondary">Sunset</span>
+                                <span className="text-white font-medium">{goldenHours.sunset}</span>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    ) : (
+                      <p className="text-secondary">Location data not available</p>
+                    )}
+                  </div>
+                  
+                  {/* Photography Conditions */}
+                  <div className="bg-[#1d0811]/80 rounded-2xl p-6 shadow-inner border border-white/5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <FiImage className="text-[#e43c1c]" size={20} />
+                      <span className="text-lg font-semibold text-white">Conditions</span>
+                    </div>
+                    
+                    <ul className="space-y-2">
+                      {getPhotographyConditions(weather).map((condition, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-[#e43c1c]"></span>
+                          <span className="text-white">{condition}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                
+                {/* Location Scouting */}
+                <div className="mt-6 bg-[#1d0811]/80 rounded-2xl p-6 shadow-inner border border-white/5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <FiMap className="text-[#e43c1c]" size={20} />
+                    <span className="text-lg font-semibold text-white">Location Scouting</span>
+                  </div>
+                  
+                  <p className="text-secondary mb-4">
+                    This location has good potential for photography. Consider exploring these areas:
+                  </p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="bg-[#1d0811]/60 rounded-xl p-4 border border-white/5">
+                      <h4 className="text-white font-medium mb-2">Urban Landmarks</h4>
+                      <p className="text-secondary text-sm">City centers often offer architectural photography opportunities.</p>
+                    </div>
+                    <div className="bg-[#1d0811]/60 rounded-xl p-4 border border-white/5">
+                      <h4 className="text-white font-medium mb-2">Natural Areas</h4>
+                      <p className="text-secondary text-sm">Parks and waterfronts provide natural backdrops.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

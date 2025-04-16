@@ -16,18 +16,22 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   authChecked: boolean;
+  isGuest: boolean;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   logOut: () => Promise<void>;
+  continueAsGuest: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   authChecked: false,
+  isGuest: false,
   signUp: async () => {},
   signIn: async () => {},
   logOut: async () => {},
+  continueAsGuest: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -36,6 +40,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [authChecked, setAuthChecked] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -46,8 +51,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (currentUser) {
         localStorage.setItem('userName', currentUser.displayName || 'User');
+        setIsGuest(false);
       } else {
         localStorage.removeItem('userName');
+        // Check if user was previously in guest mode
+        const wasGuest = localStorage.getItem('isGuest') === 'true';
+        setIsGuest(wasGuest);
       }
     });
 
@@ -98,12 +107,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const continueAsGuest = () => {
+    setLoading(true);
+    try {
+      // Create a guest user object
+      const guestUser = {
+        displayName: 'Guest User',
+        email: 'guest@example.com',
+        uid: 'guest-user-id',
+      } as User;
+      
+      setUser(guestUser);
+      setIsGuest(true);
+      localStorage.setItem('userName', 'Guest User');
+      localStorage.setItem('isGuest', 'true');
+      router.push('/home');
+    } catch (error: unknown) {
+      console.error('Error setting up guest mode:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logOut = async () => {
     setLoading(true);
     try {
       await signOut(auth);
       localStorage.removeItem('userName');
+      localStorage.removeItem('isGuest');
       setUser(null);
+      setIsGuest(false);
       router.push('/login');
     } catch (error: unknown) {
       console.error('Error signing out:', error);
@@ -117,9 +150,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     loading,
     authChecked,
+    isGuest,
     signUp,
     signIn,
     logOut,
+    continueAsGuest,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -5,20 +5,63 @@ import NavigationBar from '../components/navigation-bar';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useWeather } from '../hooks/useWeather';
-import { FiMapPin, FiNavigation, FiMap } from 'react-icons/fi';
+import { FiMapPin, FiNavigation, FiMap, FiCamera, FiSun, FiImage, FiCompass } from 'react-icons/fi';
+
+// Add photography-specific data
+const getPhotographySpots = (city: string) => {
+  // In a real app, this would come from a database or API
+  const spots = [
+    { name: 'City Center', type: 'Urban', description: 'Architectural photography opportunities' },
+    { name: 'Waterfront', type: 'Natural', description: 'Reflections and cityscape views' },
+    { name: 'Historic District', type: 'Urban', description: 'Character and history' },
+    { name: 'Park', type: 'Natural', description: 'Nature and wildlife photography' }
+  ];
+  
+  return spots;
+};
+
+// Calculate golden hour times (simplified)
+const calculateGoldenHours = (lat: number, lon: number) => {
+  // This is a simplified calculation - in a real app, you'd use a proper astronomical library
+  const date = new Date();
+  const hour = date.getHours();
+  
+  // Approximate golden hours based on time of day
+  let sunrise = '6:00 AM';
+  let sunset = '8:00 PM';
+  
+  if (hour < 12) {
+    // Morning golden hour is 1 hour after sunrise
+    return {
+      sunrise: sunrise,
+      morningGolden: '7:00 AM',
+      sunset: sunset,
+      eveningGolden: '7:00 PM'
+    };
+  } else {
+    // Evening golden hour is 1 hour before sunset
+    return {
+      sunrise: sunrise,
+      morningGolden: '7:00 AM',
+      sunset: sunset,
+      eveningGolden: '7:00 PM'
+    };
+  }
+};
 
 export default function MapView() {
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
   const router = useRouter();
   const { weather, loading } = useWeather();
   const [mapUrl, setMapUrl] = useState('');
+  const [showPhotographyInfo, setShowPhotographyInfo] = useState(true);
 
   useEffect(() => {
-    // Redirect if not authenticated
-    if (!user && !loading) {
+    // Redirect if not authenticated and not in guest mode
+    if (!user && !isGuest && !loading) {
       router.push('/login');
     }
-  }, [user, router, loading]);
+  }, [user, isGuest, loading, router]);
 
   useEffect(() => {
     // Set map URL when weather data is available
@@ -80,10 +123,103 @@ export default function MapView() {
                   )}
                 </div>
                 <div className="p-6 border-t border-white/5">
-                  <p className="text-secondary text-sm">
-                    Note: This is a simplified map view. In a production environment, you would
-                    implement a more advanced mapping solution with interactive features.
-                  </p>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                      <FiCamera className="text-[#e43c1c]" size={20} />
+                      Photography Information
+                    </h3>
+                    <button 
+                      onClick={() => setShowPhotographyInfo(!showPhotographyInfo)}
+                      className="text-[#e43c1c] hover:text-[#f04d2e] transition-colors"
+                    >
+                      {showPhotographyInfo ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                  
+                  {showPhotographyInfo && (
+                    <div className="space-y-6">
+                      {/* Golden Hours */}
+                      <div className="bg-[#1d0811]/80 rounded-xl p-4 border border-white/5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <FiSun className="text-[#e43c1c]" size={18} />
+                          <span className="font-semibold text-white">Golden Hours</span>
+                        </div>
+                        
+                        {weather.lat && weather.lon ? (
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            {(() => {
+                              const goldenHours = calculateGoldenHours(weather.lat, weather.lon);
+                              return (
+                                <>
+                                  <div className="flex justify-between">
+                                    <span className="text-secondary">Sunrise</span>
+                                    <span className="text-white">{goldenHours.sunrise}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-secondary">Morning Golden</span>
+                                    <span className="text-white">{goldenHours.morningGolden}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-secondary">Evening Golden</span>
+                                    <span className="text-white">{goldenHours.eveningGolden}</span>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    <span className="text-secondary">Sunset</span>
+                                    <span className="text-white">{goldenHours.sunset}</span>
+                                  </div>
+                                </>
+                              );
+                            })()}
+                          </div>
+                        ) : (
+                          <p className="text-secondary text-sm">Location data not available</p>
+                        )}
+                      </div>
+                      
+                      {/* Photography Spots */}
+                      <div className="bg-[#1d0811]/80 rounded-xl p-4 border border-white/5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <FiImage className="text-[#e43c1c]" size={18} />
+                          <span className="font-semibold text-white">Photography Spots</span>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          {getPhotographySpots(weather.city).map((spot, index) => (
+                            <div key={index} className="flex items-start gap-2">
+                              <span className="w-2 h-2 rounded-full bg-[#e43c1c] mt-2"></span>
+                              <div>
+                                <h4 className="text-white font-medium">{spot.name}</h4>
+                                <p className="text-secondary text-sm">{spot.description}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Photography Tips */}
+                      <div className="bg-[#1d0811]/80 rounded-xl p-4 border border-white/5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <FiCompass className="text-[#e43c1c]" size={18} />
+                          <span className="font-semibold text-white">Photography Tips</span>
+                        </div>
+                        
+                        <ul className="space-y-2 text-sm">
+                          <li className="flex items-start gap-2">
+                            <span className="w-2 h-2 rounded-full bg-[#e43c1c] mt-2"></span>
+                            <span className="text-white">Arrive 30 minutes before golden hour to scout locations</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="w-2 h-2 rounded-full bg-[#e43c1c] mt-2"></span>
+                            <span className="text-white">Use a tripod for stability during low light conditions</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="w-2 h-2 rounded-full bg-[#e43c1c] mt-2"></span>
+                            <span className="text-white">Consider using ND filters for longer exposures</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

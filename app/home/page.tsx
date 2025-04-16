@@ -14,7 +14,7 @@ import NavigationBar from '../components/navigation-bar';
 
 export default function Home() {
   const { weather, loading, error } = useWeather();
-  const { user } = useAuth();
+  const { user, isGuest } = useAuth();
   const router = useRouter();
   const [dateTime, setDateTime] = useState(new Date());
 
@@ -27,11 +27,11 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Redirect if not authenticated
-    if (!user && !loading) {
+    // Redirect if not authenticated and not in guest mode
+    if (!user && !isGuest && !loading) {
       router.push('/login');
     }
-  }, [user, loading, router]);
+  }, [user, isGuest, loading, router]);
 
   if (loading) {
     return (
