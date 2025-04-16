@@ -48,7 +48,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#1C1D22] text-white">
+    <div className="min-h-screen bg-[#1d0811] text-white">
       <NavigationBar />
       
       <main className="container mx-auto px-4 pt-32 pb-24">

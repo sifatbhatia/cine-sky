@@ -1,20 +1,21 @@
 @import "tailwindcss";
+
 :root {
   /* Colors */
-  --background: #0a1929;
-  --foreground: #e2e8f0;
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
-  --primary-light: #60a5fa;
+  --background: #1d0811;
+  --foreground: #ffffff;
+  --primary: #e43c1c;
+  --primary-dark: #c93517;
+  --primary-light: #f04d2e;
   --secondary: #94a3b8;
-  --accent: #fbbf24;
+  --accent: #e43c1c;
   --success: #10b981;
   --danger: #ef4444;
-  --card: #172032;
-  --card-foreground: #e2e8f0;
-  --border: #334155;
-  --input: #1e293b;
-  --ring: #3b82f6;
+  --card: #2a1015;
+  --card-foreground: #ffffff;
+  --border: #3d1d24;
+  --input: #2a1015;
+  --ring: #e43c1c;
   --radius: 0.75rem;
 }
 
@@ -25,38 +26,67 @@
   box-sizing: border-box;
 } */
 
-  body {
-    background: var(--background);
-    color: var(--foreground);
+body {
+  background: var(--background);
+  color: var(--foreground);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    line-height: 1.7;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  }
+}
 
 /* Typography */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: "Boldonse", system-ui, sans-serif;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 0.5em;
-    letter-spacing: -0.02em;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Boldonse", system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+  letter-spacing: -0.02em;
+}
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
-h4 { font-size: 1.5rem; }
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
 
 @media (min-width: 640px) {
-  h1 { font-size: 3rem; }
-  h2 { font-size: 2.25rem; }
-  h3 { font-size: 1.875rem; }
-  h4 { font-size: 1.5rem; }
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2.25rem;
+  }
+
+  h3 {
+    font-size: 1.875rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+  }
 }
 
 @media (min-width: 768px) {
-  h1 { font-size: 3.75rem; }
+  h1 {
+    font-size: 3.75rem;
+  }
 }
 
 /* Links */
@@ -108,12 +138,12 @@ a:hover {
   color: var(--card-foreground);
   border-radius: var(--radius);
   padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: all 300ms ease;
 }
 
 .card:hover {
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Form Elements */
@@ -135,22 +165,22 @@ a:hover {
 }
 
 /* Scrollbar */
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
 
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--secondary);
-    border-radius: 5px;
-  }
+::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 5px;
+}
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 /* Navigation */
@@ -465,7 +495,7 @@ a:hover {
 /* Home Page Styles */
 .home-container {
   min-height: 100vh;
-  background-color: var(--background);
+  
   color: var(--foreground);
   padding: 150px 100px;
 }

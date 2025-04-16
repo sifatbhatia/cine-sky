@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 import { WeatherData } from '../types/weather';
 
 const defaults = {
-  color: '#3b82f6',
+  color: '#e43c1c',
   size: 128,
   animate: true,
 };
@@ -98,7 +98,7 @@ export default function WeatherSearch() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1C1D22] text-white">
+    <div className="min-h-screen bg-[#1d0811] text-white">
       <NavigationBar />
       <div className="container mx-auto px-4 pt-32 pb-24">
         <div className="max-w-4xl mx-auto">
@@ -113,16 +113,16 @@ export default function WeatherSearch() {
             <div className="relative flex-1">
               <input
                 type="text"
-                className="w-full h-[64px] bg-[#1C1D22]/70 backdrop-blur-md rounded-full pl-14 pr-6 text-lg sm:text-xl text-white placeholder-secondary/50 border border-white/10 focus:ring-2 focus:ring-primary/30 focus:outline-none transition-all"
+                className="w-full h-[64px] bg-[#1d0811]/70 backdrop-blur-md rounded-full pl-14 pr-6 text-lg sm:text-xl text-white placeholder-secondary/50 border border-white/10 focus:ring-2 focus:ring-[#e43c1c]/30 focus:outline-none transition-all"
                 placeholder="Search for a city (e.g. London, New York...)"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
-              <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-secondary" size={20} />
+              <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-[#e43c1c]" size={20} />
             </div>
             <button
               type="submit"
-              className="h-[64px] px-10 bg-primary hover:bg-primary-dark rounded-full text-white text-lg sm:text-xl font-semibold transition-all"
+              className="h-[64px] px-10 bg-[#e43c1c] hover:bg-[#c93517] rounded-full text-white text-lg sm:text-xl font-semibold transition-all"
               disabled={loading}
             >
               {loading ? (
@@ -139,7 +139,7 @@ export default function WeatherSearch() {
           {!weather && !loading && !error && (
             <div className="mb-12">
               <h3 className="text-secondary text-xl font-semibold mb-4 flex items-center gap-2">
-                <FiCompass size={22} />
+                <FiCompass className="text-[#e43c1c]" size={22} />
                 Popular Cities
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -150,7 +150,7 @@ export default function WeatherSearch() {
                       setQuery(city);
                       fetchWeatherData(city);
                     }}
-                    className="px-5 py-3 bg-[#1C1D22]/70 backdrop-blur-lg rounded-xl text-white text-lg font-medium hover:bg-[#1C1D22]/90 transition-all"
+                    className="px-5 py-3 bg-[#1d0811]/70 backdrop-blur-lg rounded-xl text-white text-lg font-medium hover:bg-[#1d0811]/90 transition-all"
                   >
                     {city}
                   </button>
@@ -173,18 +173,18 @@ export default function WeatherSearch() {
 
           {loading && (
             <div className="flex flex-col items-center justify-center py-24">
-              <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-8"></div>
+              <div className="w-16 h-16 border-4 border-[#e43c1c]/20 border-t-[#e43c1c] rounded-full animate-spin mb-8"></div>
               <p className="text-xl text-secondary">Searching for weather data...</p>
             </div>
           )}
 
           {weather && !loading && (
-            <div className="bg-[#1C1D22]/60 backdrop-blur-xl rounded-[32px] overflow-hidden">
-              <div className="p-12 bg-gradient-to-r from-primary/10 to-transparent">
+            <div className="bg-[#1d0811]/60 backdrop-blur-xl rounded-[32px] overflow-hidden">
+              <div className="p-12 bg-gradient-to-r from-[#e43c1c]/10 to-transparent">
                 <div className="flex flex-wrap items-start justify-between gap-8">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
-                      <FiMapPin className="text-primary" size={24} />
+                      <FiMapPin className="text-[#e43c1c]" size={24} />
                       <h2 className="text-4xl font-bold text-white">
                         {weather.city}, {weather.country}
                       </h2>
@@ -208,31 +208,29 @@ export default function WeatherSearch() {
                 </div>
               </div>
 
-              <div className="p-12 pt-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  <div className="bg-[#1C1D22]/80 rounded-2xl p-6 shadow-inner border border-white/5">
-                    <div className="flex items-center gap-2 text-secondary mb-2">
-                      <FiThermometer size={20} />
-                      <span className="text-base">Temperature</span>
-                    </div>
-                    <p className="text-3xl font-semibold text-white">{weather.temperatureC}°C</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
+                <div className="bg-[#1d0811]/80 rounded-2xl p-6 shadow-inner border border-white/5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FiThermometer className="text-[#e43c1c]" size={20} />
+                    <span className="text-base text-secondary">Temperature</span>
                   </div>
+                  <p className="text-3xl font-semibold text-white">{weather.temperatureC}°C</p>
+                </div>
 
-                  <div className="bg-[#1C1D22]/80 rounded-2xl p-6 shadow-inner border border-white/5">
-                    <div className="flex items-center gap-2 text-secondary mb-2">
-                      <FiDroplet size={20} />
-                      <span className="text-base">Humidity</span>
-                    </div>
-                    <p className="text-3xl font-semibold text-white">{weather.humidity}%</p>
+                <div className="bg-[#1d0811]/80 rounded-2xl p-6 shadow-inner border border-white/5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FiDroplet className="text-[#e43c1c]" size={20} />
+                    <span className="text-base text-secondary">Humidity</span>
                   </div>
+                  <p className="text-3xl font-semibold text-white">{weather.humidity}%</p>
+                </div>
 
-                  <div className="bg-[#1C1D22]/80 rounded-2xl p-6 shadow-inner border border-white/5">
-                    <div className="flex items-center gap-2 text-secondary mb-2">
-                      <FiWind size={20} />
-                      <span className="text-base">Wind Speed</span>
-                    </div>
-                    <p className="text-3xl font-semibold text-white">{weather.wind.speed} m/s</p>
+                <div className="bg-[#1d0811]/80 rounded-2xl p-6 shadow-inner border border-white/5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FiWind className="text-[#e43c1c]" size={20} />
+                    <span className="text-base text-secondary">Wind Speed</span>
                   </div>
+                  <p className="text-3xl font-semibold text-white">{weather.wind.speed} m/s</p>
                 </div>
               </div>
             </div>

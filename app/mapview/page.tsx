@@ -28,12 +28,12 @@ export default function MapView() {
   }, [weather]);
 
   return (
-    <div className="min-h-screen bg-[#1C1D22] text-white">
+    <div className="min-h-screen bg-[#1d0811] text-white">
       <NavigationBar />
       <div className="container mx-auto px-4 pt-32 pb-24">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-8">
-            <FiMap className="text-primary" size={36} />
+            <FiMap className="text-[#e43c1c]" size={36} />
             <h1 className="text-[64px] font-extrabold tracking-tight leading-none">
               Map View
             </h1>
@@ -41,27 +41,27 @@ export default function MapView() {
           
           {loading ? (
             <div className="flex flex-col items-center justify-center py-24">
-              <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-8"></div>
+              <div className="w-16 h-16 border-4 border-[#e43c1c]/20 border-t-[#e43c1c] rounded-full animate-spin mb-8"></div>
               <p className="text-xl text-secondary">Loading location data...</p>
             </div>
           ) : weather ? (
             <div className="space-y-6">
-              <div className="bg-[#1C1D22]/60 backdrop-blur-xl rounded-[32px] p-8">
+              <div className="bg-[#1d0811]/60 backdrop-blur-xl rounded-[32px] p-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <FiMapPin className="text-primary" size={24} />
+                  <FiMapPin className="text-[#e43c1c]" size={24} />
                   <h2 className="text-3xl font-bold">
                     {weather.city}, {weather.country}
                   </h2>
                 </div>
                 <div className="flex items-center gap-3 text-secondary">
-                  <FiNavigation size={18} />
+                  <FiNavigation className="text-[#e43c1c]" size={18} />
                   <p className="text-lg">
                     {weather?.lat?.toFixed(4) ?? '0.0000'}°N, {weather?.lon?.toFixed(4) ?? '0.0000'}°E
                   </p>
                 </div>
               </div>
               
-              <div className="bg-[#1C1D22]/60 backdrop-blur-xl rounded-[32px] overflow-hidden">
+              <div className="bg-[#1d0811]/60 backdrop-blur-xl rounded-[32px] overflow-hidden">
                 <div className="relative h-[600px]">
                   {mapUrl ? (
                     <iframe
