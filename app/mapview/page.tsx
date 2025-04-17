@@ -176,25 +176,35 @@ export default function MapView() {
                         )}
                       </div>
                       
-                      {/* Photography Spots */}
-                      <div className="bg-[#1d0811]/80 rounded-xl p-4 border border-white/5">
-                        <div className="flex items-center gap-2 mb-3">
-                          <FiImage className="text-[#e43c1c]" size={18} />
-                          <span className="font-semibold text-white">Photography Spots</span>
-                        </div>
-                        
-                        <div className="space-y-3">
-                          {getPhotographySpots().map((spot, index) => (
-                            <div key={index} className="flex items-start gap-2">
-                              <span className="w-2 h-2 rounded-full bg-[#e43c1c] mt-2"></span>
-                              <div>
-                                <h4 className="text-white font-medium">{spot.name}</h4>
-                                <p className="text-secondary text-sm">{spot.description}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                      {/* Photography Spots (Enhanced) */}
+<div className="bg-[#1d0811]/80 rounded-xl p-4 border border-white/5">
+  <div className="flex items-center gap-2 mb-3">
+    <FiImage className="text-[#e43c1c]" size={18} />
+    <span className="font-semibold text-white">Top Photography Spots</span>
+  </div>
+  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {getPhotographySpots().map((spot, index) => (
+      <div key={index} className="rounded-xl bg-[#2a1020]/70 border border-[#e43c1c]/10 p-4 flex flex-col shadow-md hover:shadow-lg transition-shadow">
+        <div className="flex items-center gap-2 mb-2">
+          <FiMapPin className="text-[#e43c1c]" size={16} />
+          <h4 className="text-white font-semibold text-lg">{spot.name}</h4>
+          <span className="ml-auto px-2 py-0.5 rounded-full text-xs bg-[#e43c1c]/20 text-[#e43c1c] font-medium">{spot.type}</span>
+        </div>
+        <p className="text-secondary text-sm mb-2">{spot.description}</p>
+        {weather && (
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(weather.city + ' ' + spot.name)}`}
+            className="text-[#e43c1c] underline text-xs mt-auto hover:text-[#f04d2e]"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View on Google Maps
+          </a>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
                       
                       {/* Photography Tips */}
                       <div className="bg-[#1d0811]/80 rounded-xl p-4 border border-white/5">

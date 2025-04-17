@@ -92,6 +92,13 @@ export default function RegisterPage() {
         >
           Sign Up →
         </button>
+        <button
+          type="button"
+          className="auth-button bg-white text-[#e43c1c] border border-[#e43c1c] mt-2 hover:bg-[#f4e3e0]"
+          onClick={() => router.push('/home')}
+        >
+          Continue as Guest
+        </button>
 
         <div className="auth-footer">
           have an account? <Link href="/login">Sign in</Link>
