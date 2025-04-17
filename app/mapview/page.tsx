@@ -8,7 +8,7 @@ import { useWeather } from '../hooks/useWeather';
 import { FiMapPin, FiNavigation, FiMap, FiCamera, FiSun, FiImage, FiCompass } from 'react-icons/fi';
 
 // Add photography-specific data
-const getPhotographySpots = (city: string) => {
+const getPhotographySpots = () => {
   // In a real app, this would come from a database or API
   const spots = [
     { name: 'City Center', type: 'Urban', description: 'Architectural photography opportunities' },
@@ -21,14 +21,14 @@ const getPhotographySpots = (city: string) => {
 };
 
 // Calculate golden hour times (simplified)
-const calculateGoldenHours = (lat: number, lon: number) => {
+const calculateGoldenHours = () => {
   // This is a simplified calculation - in a real app, you'd use a proper astronomical library
   const date = new Date();
   const hour = date.getHours();
   
   // Approximate golden hours based on time of day
-  let sunrise = '6:00 AM';
-  let sunset = '8:00 PM';
+  const sunrise = '6:00 AM';
+  const sunset = '8:00 PM';
   
   if (hour < 12) {
     // Morning golden hour is 1 hour after sunrise
@@ -148,7 +148,7 @@ export default function MapView() {
                         {weather.lat && weather.lon ? (
                           <div className="grid grid-cols-2 gap-2 text-sm">
                             {(() => {
-                              const goldenHours = calculateGoldenHours(weather.lat, weather.lon);
+                              const goldenHours = calculateGoldenHours();
                               return (
                                 <>
                                   <div className="flex justify-between">
@@ -184,7 +184,7 @@ export default function MapView() {
                         </div>
                         
                         <div className="space-y-3">
-                          {getPhotographySpots(weather.city).map((spot, index) => (
+                          {getPhotographySpots().map((spot, index) => (
                             <div key={index} className="flex items-start gap-2">
                               <span className="w-2 h-2 rounded-full bg-[#e43c1c] mt-2"></span>
                               <div>

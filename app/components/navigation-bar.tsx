@@ -17,7 +17,7 @@ export default function Navbar() {
   React.useEffect(() => {
     setIsMenuOpen(false);
     document.body.style.overflow = '';
-    // eslint-disable-next-line
+    
   }, [pathname]);
 
   const toggleMenu = () => {
@@ -152,7 +152,7 @@ export default function Navbar() {
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
-          {navLinks.map((link, idx) => (
+          {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}

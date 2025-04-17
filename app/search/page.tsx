@@ -58,14 +58,14 @@ const getPhotographyConditions = (weather: WeatherData) => {
 };
 
 // Calculate golden hour times (simplified)
-const calculateGoldenHours = (lat: number, lon: number) => {
+const calculateGoldenHours = () => {
   // This is a simplified calculation - in a real app, you'd use a proper astronomical library
   const date = new Date();
   const hour = date.getHours();
   
   // Approximate golden hours based on time of day
-  let sunrise = '6:00 AM';
-  let sunset = '8:00 PM';
+  const sunrise = '6:00 AM';
+  const sunset = '8:00 PM';
   
   if (hour < 12) {
     // Morning golden hour is 1 hour after sunrise
@@ -310,7 +310,7 @@ export default function WeatherSearch() {
                     {weather.lat && weather.lon ? (
                       <div className="space-y-3">
                         {(() => {
-                          const goldenHours = calculateGoldenHours(weather.lat, weather.lon);
+                          const goldenHours = calculateGoldenHours();
                           return (
                             <>
                               <div className="flex justify-between">
